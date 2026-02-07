@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Medição Mensal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 420px;
+      margin: 20px auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+
+    p.subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+    }
+
+    select, input, textarea {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    input[type="number"] {
+      font-size: 18px;
+    }
+
+    .help {
+      font-size: 13px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .radio-group {
+      margin-top: 10px;
+    }
+
+    .radio-group label {
+      font-weight: normal;
+      display: block;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 15px;
+      font-size: 18px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #256428;
+    }
+
+    .success {
+      text-align: center;
+      font-size: 18px;
+      color: #2e7d32;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>📋 Medição Mensal</h1>
+    <p class="subtitle">Digite os números exatamente como aparecem no relógio</p>
+
+    <form id="medicaoForm">
+
+      <label>🏢 Unidade</label>
+      <select name="unidade" required>
+        <option value="">Selecione a unidade</option>
+        <option value="Enjoy House I">Enjoy House I</option>
+        <option value="Enjoy House II">Enjoy House II</option>
+        <option value="Bloco A">Bloco A</option>
+        <option value="Bloco B">Bloco B</option>
+      </select>
+
+      <label>🚰 Leitura da Água</label>
+      <input type="number" name="leitura_agua" placeholder="Exemplo: 412" required>
+      <div class="help">Digite somente os números do visor</div>
+
+      <label>💡 Leitura da Luz</label>
+      <input type="number" name="leitura_luz" placeholder="Exemplo: 1904" required>
+      <div class="help">Digite somente os números do visor</div>
+
+      <label>⏱️ Houve atraso no envio?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="motivo_atraso" value="nao" checked> Não</label>
+        <label><input type="radio" name="motivo_atraso" value="manutencao"> Sim, manutenção</label>
+        <label><input type="radio" name="motivo_atraso" value="acesso"> Sim, dificuldade de acesso</label>
+        <label><input type="radio" name="motivo_atraso" value="grave"> Outro problema importante</label>
+      </div>
+
+      <label>📝 Observação (se necessário)</label>
+      <textarea name="observacao" rows="3" placeholder="Exemplo: relógio trancado"></textarea>
+
+      <button type="submit">📤 Enviar medições</button>
+    </form>
+
+    <div class="success" id="successMsg">
+      ✅ Medições enviadas com sucesso<br>Obrigado!
+    </div>
+  </div>
+
+<script>
+  const form = document.getElementById('medicaoForm');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const data = new FormData(form);
+
+    const response = await fetch("https://SEU-N8N/webhook/medicoes", {
+      method: "POST",
+      body: data
+    });
+
+    if (response.ok) {
+      form.style.display = "none";
+      document.getElementById("successMsg").style.display = "block";
+    } else {
+      alert("Erro ao enviar. Tente novamente.");
+    }
+  });
+</script>
+
+</body>
+</html>
